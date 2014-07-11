@@ -23,7 +23,10 @@ shinyServer(function(input, output, session) {
     
     # Update the field selects
     updateSelectInput(session, "myNumeric", choices=dfinfo$numerics$name, selected="")
-    updateSelectInput(session, "myFactor", choices=dfinfo$factors$name, selected="")
+    updateSelectInput(session, "myFactor", choices=c("factor(0)", as.character(dfinfo$factors$name)), selected="factor(0)", label="Group By")
+    
+    # Update the labels
+    # updateTextInput(session, "myXAxis", value=)
     
   }, priority=1)
   
@@ -33,10 +36,9 @@ shinyServer(function(input, output, session) {
   
     if (input$navlist == "boxplot") {
       if (input$myNumeric =="") return()
-      numeric1=input$myNumeric
-      template="ggplot(getSelectedDF(), aes(x=factor(0), y={{numeric1}})) + geom_boxplot()"
-      x=whisker.render(template)
-      eval(parse(text=whisker.render(template)))
+      template = "ggplot(getSelectedDF(), aes(x={{myFactor}}, y={{myNumeric}})) + geom_boxplot() + xlab('{{myXLab}}') + ylab('{{myYLab}}')"
+      x=whisker.render(template, reactiveValuesToList(input))
+      eval(parse(text=whisker.render(x)))
     }
 
   })
