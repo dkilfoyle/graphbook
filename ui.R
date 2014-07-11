@@ -1,6 +1,7 @@
 
 library(shiny)
 library(ggplot2)
+library(shinyAce)
 
 source("R/dkdfinfo.r")
 data(iris)
@@ -16,19 +17,22 @@ shinyUI(fluidPage(
     tabPanel("Box Plot", value="boxplot",
       tabsetPanel(
         tabPanel("Plot", plotOutput("myPlot")),
-        tabPanel("Code", verbatimTextOutput("myCode"))
+        tabPanel("Code", aceEditor("myCode","", mode="r"))
       ),
       hr(),
       fluidRow(
         column(3,
                h4("Select Fields"),
                selectInput("myDataFrame", "Dataframe", choices=getDataFrames()),
-               selectInput("myNumeric", "Numeric", choices=getdfinfo(getDataFrames()[1])$numerics$name),
-               selectInput("myFactor", "Group By", choices=getdfinfo(getDataFrames()[1])$factors$name)
+               selectizeInput("myNumeric", "Numeric", choices=getdfinfo(getDataFrames()[1])$numerics$name, options=list(dropdownParent="body")),
+               selectizeInput("myFactor", "Group By", choices=c("factor(0)", as.character(getdfinfo(getDataFrames()[1])$factors$name)), options=list(dropdownParent="body"))
                
         ),
         column(4, offset = 1,
-               h4("Col2")
+               h4("Labels"),
+               textInput("myTitle", "title"),
+               textInput("myXLab", "X Axis"),
+               textInput("myYLab", "Y Axis")
         ),
         column(4,
                h4("col3")
