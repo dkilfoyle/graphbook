@@ -16,7 +16,7 @@ shinyUI(fluidPage(
 
   navlistPanel(
     "Info",
-    tabPanel("Data", value="dataframes",
+    tabPanel("Dataframes", value="dataframes",
       fluidRow(
         selectInput("myDataFrame", "Dataframe", choices=getDataFrames())
       ),
@@ -44,15 +44,15 @@ shinyUI(fluidPage(
       fluidRow(
         column(3,
                h4("Select Fields"),
-               selectizeInput("myNumeric", "Numeric", choices=getdfinfo(getDataFrames()[1])$numerics$name, options=list(dropdownParent="body")),
-               selectizeInput("myFactor", "Group By", choices=c("factor(0)", as.character(getdfinfo(getDataFrames()[1])$factors$name)), options=list(dropdownParent="body"))
+               selectizeInput("bp_numeric", "Numeric", choices=getdfinfo(getDataFrames()[1])$numerics$name, options=list(dropdownParent="body")),
+               selectizeInput("bp_factor", "Group By", choices=c("factor(0)", as.character(getdfinfo(getDataFrames()[1])$factors$name)), options=list(dropdownParent="body"))
                
         ),
         column(4, offset = 1,
                h4("Labels"),
-               textInput("myTitle", "title"),
-               textInput("myXLab", "X Axis"),
-               textInput("myYLab", "Y Axis")
+               textInput("bp_title", "title"),
+               textInput("bp_xlab", "X Axis"),
+               textInput("bp_ylab", "Y Axis")
         ),
         column(4,
                h4("col3")
@@ -70,14 +70,14 @@ shinyUI(fluidPage(
        fluidRow(
          column(3,
                 h4("Select Fields"),
-                selectizeInput("myNumeric", "Numeric", choices=getdfinfo(getDataFrames()[1])$numerics$name, 
+                selectizeInput("sp_numeric", "Numeric", choices=getdfinfo(getDataFrames()[1])$numerics$name, 
                                options=list(dropdownParent="body", plugins=list(remove_button="", drag_drop="")), multiple=T)
          ),
          column(4, offset = 1,
                 h4("Labels"),
-                textInput("myTitle", "title"),
-                textInput("myXLab", "X Axis"),
-                textInput("myYLab", "Y Axis")
+                textInput("sp_title", "title"),
+                textInput("sp_xlab", "X Axis"),
+                textInput("sp_ylab", "Y Axis")
          ),
          column(4,
                 h4("col3")
