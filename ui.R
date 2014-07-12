@@ -15,19 +15,35 @@ shinyUI(fluidPage(
   titlePanel("Graph Cookbook"),
 
   navlistPanel(
+    "Info",
+    tabPanel("Data", value="dataframes",
+      fluidRow(
+        selectInput("myDataFrame", "Dataframe", choices=getDataFrames())
+      ),
+      hr(),
+      fluidRow(
+        tabsetPanel(
+          tabPanel("Numerics", dataTableOutput("dataframeNumerics")),
+          tabPanel("Factors", dataTableOutput("dataframeFactors")),
+          tabPanel("Logicals", dataTableOutput("dataframeLogicals")),
+          tabPanel("Dates", dataTableOutput("dataframeDates"))
+        )
+      )
+    ),
+    
+    "------",
     "Graphs",
     
     # boxplot tabpanel
     tabPanel("Box Plot", value="boxplot",
       tabsetPanel(
-        tabPanel("Plot", plotOutput("myPlot")),
-        tabPanel("Code", aceEditor("myCode","", mode="r"))
+        tabPanel("Plot", plotOutput("bp_plot")),
+        tabPanel("Code", aceEditor("bp_code","", mode="r"))
       ),
       hr(),
       fluidRow(
         column(3,
                h4("Select Fields"),
-               selectInput("myDataFrame", "Dataframe", choices=getDataFrames()),
                selectizeInput("myNumeric", "Numeric", choices=getdfinfo(getDataFrames()[1])$numerics$name, options=list(dropdownParent="body")),
                selectizeInput("myFactor", "Group By", choices=c("factor(0)", as.character(getdfinfo(getDataFrames()[1])$factors$name)), options=list(dropdownParent="body"))
                
@@ -47,14 +63,13 @@ shinyUI(fluidPage(
     # boxplot tabpanel
     tabPanel("Scatter Plot", value="scatterplot",
        tabsetPanel(
-         tabPanel("Plot", plotOutput("myPlot")),
-         tabPanel("Code", aceEditor("myCode","", mode="r"))
+         tabPanel("Plot", plotOutput("sp_plot")),
+         tabPanel("Code", aceEditor("sp_code","", mode="r"))
        ),
        hr(),
        fluidRow(
          column(3,
                 h4("Select Fields"),
-                selectInput("myDataFrame", "Dataframe", choices=getDataFrames()),
                 selectizeInput("myNumeric", "Numeric", choices=getdfinfo(getDataFrames()[1])$numerics$name, 
                                options=list(dropdownParent="body", plugins=list(remove_button="", drag_drop="")), multiple=T)
          ),
