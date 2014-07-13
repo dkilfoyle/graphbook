@@ -55,7 +55,11 @@ shinyUI(fluidPage(
                textInput("bp_ylab", "Y Axis")
         ),
         column(4,
-               h4("col3")
+               h4("Options"),
+               checkboxInput("bp_flip", label = "Horizontal", value=F),
+               checkboxInput("bp_fill", label = "Colour Fill", value=F),
+               checkboxInput("bp_notch", label = "Notched", value=F),
+               checkboxInput("bp_legend", label = "Legend", value=F)
         ) 
       )
     ), # end of boxplot panel

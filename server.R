@@ -40,8 +40,15 @@ shinyServer(function(input, output, session) {
   
     if (input$navlist == "boxplot") {
       if (input$bp_numeric =="") return()
-      template = "ggplot(getSelectedDF(), aes(x={{bp_factor}}, y={{bp_numeric}})) + \n  geom_boxplot() + \n  xlab('{{bp_xlab}}') + \n  ylab('{{bp_ylab}}')"
-      x=whisker.render(template, reactiveValuesToList(input))
+      
+      xx = "ggplot(getSelectedDF(), aes(x={{bp_factor}}, y={{bp_numeric}}{{#bp_fill}}, fill={{bp_factor}}{{/bp_fill}}))"
+      xx = paste0(xx, " +\n  geom_boxplot({{#bp_notch}}notch=T{{/bp_notch}})")
+      if (input$bp_flip)        xx = paste0(xx, " +\n  coord_flip()")
+      if (input$bp_xlab != "")  xx = paste0(xx, " +\n  xlab('{{bp_xlab}}')")
+      if (input$bp_ylab != "")  xx = paste0(xx, " +\n  ylab('{{bp_ylab}}')")
+      if (input$bp_title != "") xx = paste0(xx, " +\n  ggtitle('{{bp_title}}')")
+      if (input$bp_legend == F) xx = paste0(xx, " +\n  guides(fill=F)")
+      x=whisker.render(xx, reactiveValuesToList(input))
       updateAceEditor(session, "bp_code", x)
       return(eval(parse(text=whisker.render(x))))
     }
@@ -55,7 +62,7 @@ shinyServer(function(input, output, session) {
       inputs = reactiveValuesToList(input)
       inputs$sp_numeric1 = input$sp_numeric[1]
       inputs$sp_numeric2 = input$sp_numeric[2]
-      template = "ggplot(getSelectedDF(), aes(x={{sp_numeric1}}, y={{sp_numeric2}})) + geom_point() + xlab('{{sp_xlab}}') + ylab('{{sp_ylab}}')"
+      template = "ggplot(getSelectedDF(), aes(x={{sp_numeric1}}, y={{sp_numeric2}})) +\n  geom_point() +\n  xlab('{{sp_xlab}}') +\n ylab('{{sp_ylab}}')"
       x=whisker.render(template, inputs)
       updateAceEditor(session, "sp_code", x)
       return(eval(parse(text=whisker.render(x))))
